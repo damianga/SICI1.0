@@ -5,6 +5,12 @@
  */
 package sici.vistas;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import org.hibernate.Session;
+import sici.modelo.Articulo;
+import src.HibernateUtil;
+
 /**
  *
  * @author londe
@@ -17,6 +23,47 @@ public class crudArticulo extends javax.swing.JDialog {
     public crudArticulo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
+        cargarTabla();
+    }
+
+    public void cargarTabla(){
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        DefaultTableModel modelo = new DefaultTableModel();
+        tblArticulos.setModel(modelo);
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Cantidad");
+        modelo.addColumn("Unidad");
+        modelo.addColumn("Empresa");
+        modelo.addColumn("Marca");
+        modelo.addColumn("StockMin");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Estado");
+        
+        List<Articulo>listaArticulos = null;
+        
+        sesion.beginTransaction();
+        listaArticulos = sesion.createQuery("from Articulo").list();
+        
+        for  (Articulo x : listaArticulos){
+            Articulo Articulo = x;
+            
+            Object fila[] = new Object[10];
+            
+            fila[0] = Articulo.getIdArticulo();
+            fila[1] = Articulo.getNombre();
+            fila[2] = Articulo.getExistencia();
+            fila[3] = Articulo.getUnidad();
+            fila[4] = Articulo.getEmpresas();
+            fila[6] = Articulo.getMarca();
+            fila[7] = Articulo.getEstockMinimo();
+            fila[8] = Articulo.getPrecio();
+            fila[9] = Articulo.getEstado();
+            modelo.addRow(fila);
+        }
+        sesion.getTransaction().commit();
+        sesion.close(); 
     }
 
     /**
@@ -36,17 +83,17 @@ public class crudArticulo extends javax.swing.JDialog {
         lblEmail = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         txtCodigo = new javax.swing.JTextField();
-        txtDireccion = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
+        txtCantidad = new javax.swing.JTextField();
+        txtUnidad = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txtDescripcion = new javax.swing.JTextField();
+        txtMarca = new javax.swing.JTextField();
+        txtStock = new javax.swing.JTextField();
+        txtPrecio = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
         cmbEmpresa = new javax.swing.JComboBox<>();
@@ -54,12 +101,12 @@ public class crudArticulo extends javax.swing.JDialog {
         btnAgregar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblArticulos = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -87,11 +134,16 @@ public class crudArticulo extends javax.swing.JDialog {
         txtCodigo.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
         txtCodigo.setText("Código");
 
-        txtDireccion.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        txtDireccion.setText("Cantidad");
+        txtCantidad.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
+        txtCantidad.setText("Cantidad");
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadActionPerformed(evt);
+            }
+        });
 
-        txtEmail.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        txtEmail.setText("Unidad");
+        txtUnidad.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
+        txtUnidad.setText("Unidad");
 
         jLabel1.setText("Empresa");
 
@@ -103,17 +155,17 @@ public class crudArticulo extends javax.swing.JDialog {
 
         jLabel5.setText("Precio");
 
-        jTextField2.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        jTextField2.setText("Descripción");
+        txtDescripcion.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
+        txtDescripcion.setText("Descripción");
 
-        jTextField3.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        jTextField3.setText("Marca");
+        txtMarca.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
+        txtMarca.setText("Marca");
 
-        jTextField4.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        jTextField4.setText("Stock Mínimo");
+        txtStock.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
+        txtStock.setText("Stock Mínimo");
 
-        jTextField5.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        jTextField5.setText("Precio");
+        txtPrecio.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
+        txtPrecio.setText("Precio");
 
         jLabel6.setText("Estado");
 
@@ -181,17 +233,17 @@ public class crudArticulo extends javax.swing.JDialog {
                     .addComponent(jLabel6))
                 .addGap(74, 74, 74)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtEmail)
-                    .addComponent(txtDireccion)
+                    .addComponent(txtUnidad)
+                    .addComponent(txtCantidad)
                     .addComponent(txtCodigo)
                     .addComponent(txtNombre)
-                    .addComponent(jTextField2)
-                    .addComponent(jTextField3)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                    .addComponent(jTextField5)
+                    .addComponent(txtDescripcion)
+                    .addComponent(txtMarca)
+                    .addComponent(txtStock, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                    .addComponent(txtPrecio)
                     .addComponent(cmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbEmpresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -212,11 +264,11 @@ public class crudArticulo extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDireccion)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEmail)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -224,19 +276,19 @@ public class crudArticulo extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -244,7 +296,7 @@ public class crudArticulo extends javax.swing.JDialog {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblArticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -255,15 +307,15 @@ public class crudArticulo extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblArticulos);
 
-        jButton1.setText("Guardar");
+        btnGuardar.setText("Guardar");
 
-        jButton2.setText("Modificar");
+        btnModificar.setText("Modificar");
 
-        jButton3.setText("Eliminar");
+        btnEliminar.setText("Eliminar");
 
-        jButton4.setText("Cancelar");
+        btnCancelar.setText("Cancelar");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -271,13 +323,13 @@ public class crudArticulo extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnGuardar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnModificar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(btnEliminar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(btnCancelar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -285,10 +337,10 @@ public class crudArticulo extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btnGuardar)
+                    .addComponent(btnModificar)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -297,20 +349,20 @@ public class crudArticulo extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(62, 62, 62)
                         .addComponent(lblMantenimientoUsuario))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 868, Short.MAX_VALUE)))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -340,6 +392,10 @@ public class crudArticulo extends javax.swing.JDialog {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -387,12 +443,12 @@ public class crudArticulo extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JComboBox<String> cmbEmpresa;
     private javax.swing.JComboBox<String> cmbEstado;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -403,19 +459,19 @@ public class crudArticulo extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblMantenimientoUsuario;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JTable tblArticulos;
+    private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
-    private javax.swing.JTextField txtDireccion;
-    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtPrecio;
+    private javax.swing.JTextField txtStock;
+    private javax.swing.JTextField txtUnidad;
     // End of variables declaration//GEN-END:variables
 }

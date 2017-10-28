@@ -109,7 +109,8 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArticuloActionPerformed
-        // TODO add your handling code here:
+        crudArticulo crud = new crudArticulo(this, true);
+        crud.setVisible(true);
     }//GEN-LAST:event_btnArticuloActionPerformed
 
     private void btnResponsableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResponsableActionPerformed
