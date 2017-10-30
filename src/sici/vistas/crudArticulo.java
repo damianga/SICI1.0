@@ -25,6 +25,23 @@ public class crudArticulo extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         cargarTabla();
+//        crearTabla();
+    }
+    
+    public void crearTabla (){
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        DefaultTableModel modelo = new DefaultTableModel();
+        tblArticulos.setModel(modelo);
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Cantidad");
+        modelo.addColumn("Unidad");
+        modelo.addColumn("Empresa");
+        modelo.addColumn("Marca");
+        modelo.addColumn("StockMin");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Estado");
+        
     }
 
     public void cargarTabla(){
@@ -54,9 +71,10 @@ public class crudArticulo extends javax.swing.JDialog {
             fila[0] = Articulo.getIdArticulo();
             fila[1] = Articulo.getNombre();
             fila[2] = Articulo.getExistencia();
-            fila[3] = Articulo.getUnidad();
-            fila[4] = Articulo.getEmpresas();
-            fila[6] = Articulo.getMarca();
+            fila[3] = 
+            String.valueOf(Articulo.getUnidad()) ;
+            fila[4] = String.valueOf(Articulo.getEmpresas()) ;
+            fila[6] = String.valueOf(Articulo.getMarca()) ;
             fila[7] = Articulo.getEstockMinimo();
             fila[8] = Articulo.getPrecio();
             fila[9] = Articulo.getEstado();
@@ -243,7 +261,7 @@ public class crudArticulo extends javax.swing.JDialog {
                     .addComponent(txtPrecio)
                     .addComponent(cmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbEmpresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -349,7 +367,7 @@ public class crudArticulo extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(62, 62, 62)
                         .addComponent(lblMantenimientoUsuario))
@@ -358,11 +376,11 @@ public class crudArticulo extends javax.swing.JDialog {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 868, Short.MAX_VALUE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1080, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
